@@ -1,0 +1,39 @@
+{% extends 'main/base.html'%}
+{% block title %}Home Page {% endblock %}
+
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/home.css' %}"/>
+<div class="col pt-3">
+    <h3 style="text-align: center">Fa primul pas pentru a invata alaturi de profesorii Facultatii de Matematica si Informatica!</h3>
+
+    <div style="padding-left:20%; padding-top:5%">
+        <img class="img-fluid" src="{% static 'main/pictures/main.webp' %}" alt="" style="height: 400px; width: auto">
+    </div>
+</div>
+
+<div class="row center">
+    <div class="col" >
+        <span class="material-symbols-outlined" style="font-size:70px">
+            cast_for_education
+            </span>
+        <div style="margin: auto; padding-left:5%">Lectii</div>
+    </div>
+
+    <div class="col" >
+        <span class="material-symbols-outlined" style="font-size:70px">
+            campaign
+            </span>
+        <p style="align-self: center;">Anunturi</p>
+    </div>
+
+    <div class="col" >
+        <span class="material-symbols-outlined" style="font-size:70px">
+            description
+            </span>
+        <p style="margin: auto; padding-left:3%">Resurse</p>
+    </div>
+</div>
+
+{% endblock %}

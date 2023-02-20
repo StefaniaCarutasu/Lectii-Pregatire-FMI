@@ -1,0 +1,179 @@
+{% extends 'main/base.html'%}
+{% block title %}Profile{% endblock %}
+
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/display-course.css' %}"/>
+<script src="{% static 'main/js/delete_object.js' %}"></script>
+<script src="{% static 'main/js/show_modal.js' %}"></script>
+
+    <section class="h-100 w-100 gradient-custom-2">
+        <div class="container h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-12 col-xl-12">
+              <div class="card">
+                <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                  <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                    <img src="{{ user.profile.profilePicture.url }}"
+                      alt="Profile picture" class="img-fluid img-thumbnail mt-4 mb-2"
+                      style="z-index:1">
+                    <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                      style="z-index: 1;">
+                      <a href="{% url 'update_profile' %}" style="text-decoration: none; color:inherit">
+                      Editeaza profilul</a>
+                    </button>
+                  </div>
+                  <div class="ms-3" style="margin-top: 130px;">
+                    <h5>{{user.last_name}} {{user.first_name}}</h5>
+                  </div>
+                </div>
+                <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                  <div class="d-flex justify-content-end text-center py-1 h5 pb-3">
+                  </div>
+                </div>
+                <div class="card-body p-4 text-black">
+                  {% if profile.description%}
+                  <div class="mb-3">
+                    <p class="lead fw-normal mb-1">About</p>
+                    <div class="p-2" style="background-color: #f8f9fa;">
+                      <p class="font-italic mb-1">{{profile.description}}</p>
+                    </div>
+                  </div>
+                  {%endif%}
+                  <div class='rounded'>
+                    {% if type == "professor"%}
+                      <div class='rounded pt-4 d-flex' style="justify-content:space-between">
+                        <h4 class='text'>Lectiile mele</h4>
+                        <a class="pt-0" href="{% url 'new-course'%}"  style="text-decoration: none; "><span class="material-symbols-outlined" style="font-size: 40px; color: black"> add </span></a>
+                      </div>
+                      <hr />
+                    {% else %}
+                      <h3><b>Evenimentele zilei</b></h3>
+                      <hr />
+                    {% endif %}
+                  </div>
+                  
+                  {% comment %} Show events for students or courses for professors {% endcomment %}
+                  {%if type == "student"%}
+                    {% for event in events %}
+                      <div class='course_container pt-4'>
+                          <div class='card'>
+                              <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+                                  <div class='card_bg rounded pt-4 pb-3 card_container'> 
+                                      <div class="container" style="display: flex; justify-content:space-between">
+                                          <div  class="container d-flex align-items-center">
+                                              <h6 class=' ps-3 text'>{{event.title}}</h6>
+                                          </div>                
+                                      </div>      
+                                  </div>
+                              </div>
+                              <div class='card-body p-1 pb-2'>
+                                  <div class="container w-75 p-1 pb-2 bg-light border-white" >
+                                      <p class="text-start">{{event.content}}</p>
+                                      <p class="text-start">Are loc la data de: <b>{{event.date|date:'d.m.Y'}} </b></p>
+                                      <p class="text-muted text-end"><b>Creat la data de:</b> {{event.date|date:'d.m.Y'}}</p>
+                                  </div>
+
+                              </div>
+                          </div>
+                      </div>
+                      {% empty %}
+                        <tr>Nu exista niciun eveniment programat pentru ziua curenta.</tr>
+                      {%endfor%}
+                    {%else%}
+                    {% for course in courses %}
+                    <div class='course_container'>
+                      <div class='card'>
+                          <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+                              <div class='card_bg rounded pt-4 pb-3 card_container align-middle' style="justify-content:space-between">
+                                  <h4 class='text-capitalize ps-3 text'>{{course.topic}}</h4>
+                                  <div class="d-flex">
+                                    <a class="px-1" href="{% url 'update-course' course.id %}"  style="text-decoration: none; color:white"><span class="material-symbols-outlined">edit </span></a>
+                                    <a id = "delete_course" class="px-1" href="#" onClick=includeContent("{% url 'delete-course' course.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:red"><span class="material-symbols-outlined">delete </span></a>
+                                </div>
+                              </div>
+                          </div>
+          
+                          <div class='card-body px-0 pb-2'>
+                              <div class="container w-75 p-3 bg-light border-white">                                  
+                                  <div class="row">
+                                      <div class="col-md">
+                                         <b>Descriere curs:</b>
+                                      </div>
+                                      <div class="col-md">
+                                          {{course.description}}
+                                      </div>
+                                  </div>
+
+                                  <div class="row">
+                                      <div class="col-md">
+                                         <b>Data:</b>
+                                      </div>
+                                      <div class="col-md">
+                                          {{course.date|date:"d.m.Y"}}
+                                      </div>
+                                  </div>
+          
+                                  <div class="row">
+                                      <div class="col-md">
+                                         <b>Ora de inceput:</b>
+                                      </div>
+                                      <div class="col-md">
+                                          {{course.startTime}}
+                                      </div>
+                                  </div>
+          
+                                  <div class="row">
+                                      <div class="col-md">
+                                         <b>Sala:</b>
+                                      </div>
+                                      <div class="col-md">
+                                          Amfiteatrul {{course.lectureHall.name}}, etaj {{course.lectureHall.floor}}
+                                      </div>
+                                  </div>
+                              </div>
+          
+                          </div>
+                      </div>
+                  </div>
+                  {%empty%}
+                    <tr>Nu ati adaugat inca nicio lectie</tr>
+                  {%endfor%}
+                  {%endif%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Sterge</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="include-content">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="newReviewModal" tabindex="-1" aria-labelledby="newReviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newReviewModalLabel">Adauga</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="include-review-form">
+      
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

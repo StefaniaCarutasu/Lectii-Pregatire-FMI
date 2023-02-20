@@ -1,0 +1,40 @@
+.my_container {
+    position: relative;
+    margin-bottom: 5%;
+    width: 90%;
+    left: 15%;
+
+    padding-top: 5%;
+}
+
+.course_container {
+    position: relative;
+    margin-bottom: 5%;
+    width: 90%;
+    left: 5%;
+    padding-top: 3%;
+}
+
+.card_container {
+    display: flex;
+}
+
+.edit_button {
+    margin-left: 80%;
+}
+
+.card_bg {
+    background-color: black;
+    color: white;
+}
+
+
+.file_link {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: left;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: black;
+    text-decoration: none; /* no underline */
+  }

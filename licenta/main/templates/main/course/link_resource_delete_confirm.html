@@ -1,0 +1,14 @@
+{% load crispy_forms_tags%}
+
+<div class="main">
+    <!-- Create a Form -->
+    <form method="POST" action="{% url 'delete-link-resource' object.id %}">
+        <!-- Security token by Django -->
+        {% csrf_token %}{{form|crispy}}
+        <p>Sunteti sigur ca doriti stergerea acestei resurse?</p>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-danger">Sterge</button>
+            <button  class="btn btn-warning"><a href="{% url 'list-courses' %}" style="text-decoration:none; color:white">Renunta</a></button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,15 @@
+{% load crispy_forms_tags%}
+
+<div class="main">
+    <!-- Create a Form -->
+    <form method="POST" action="{% url 'new_file_resource' course_id %}" enctype="multipart/form-data">
+        <p>Adauga o noua resursa pentru aceasta lectie</p>
+        <!-- Security token by Django -->
+        {% csrf_token %}{{form|crispy}}
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Adauga</button>
+            <button  class="btn btn-danger"><a href="{% url 'display-course' course_id %}" style="text-decoration:none; color:white">Renunta</a></button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,75 @@
+{% extends 'main/base.html'%}
+
+{% block title %}Evenimente{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/list-events.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/snackbar.css' %}"/>
+<script src="{% static 'main/js/snackbar.js' %}"></script>
+<script src="{% static 'main/js/delete_object.js' %}"></script>
+
+<div class="container" style="display: flex; justify-content:space-between">
+    <h2>Evenimente</h2>
+    <a class="pt-0" href="{% url 'new-event'%}"  style="text-decoration: none; color:black"><span class="material-symbols-outlined" style="font-size: 40px">  add </span></a>
+    {% comment %} <div class="px-3"><button class='btn btn-outline-primary' ><a href="{% url 'new-announcement'%}"  style="text-decoration: none;">Adauga anunt</a></button></div> {% endcomment %}
+</div>
+<hr />
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <div {% if message.tags %} class="{{ message.tags }} show"{% endif %} id="snackbar">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% for object in object_list %}
+
+<div class='course_container pt-3'>
+    <div class='card'>
+        <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+            <div class='card_bg rounded pt-4 pb-3 card_container'> 
+                <div class="container" style="display: flex; justify-content:space-between">
+                    <div  class="container d-flex align-items-center">
+                        <h5 class=' ps-3 text'>{{object.title}}</h5>
+                    </div>
+                    <div class="d-flex">
+                        <a class="px-1" href="{% url 'update_event' object.id %}"  style="text-decoration: none; color:white"><span class="material-symbols-outlined">edit </span></a>
+                        <a id = "delete_event" class="px-1" href="#" onClick=includeContent("{% url 'delete-event' object.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:red"><span class="material-symbols-outlined">delete </span></a>
+                    </div>                  
+                </div>      
+            </div>
+        </div>
+        <div class='card-body p-1 pb-2'>
+            <div class="container w-75 p-1 pb-2 bg-light border-white" >
+                <p class="text-start">{{object.content}}</p>
+                <p class="text-start">Are loc la data de: <b>{{object.date|date:'d.m.Y'}} </b></p>
+                <p class="text-muted text-end"><b>Creat la data de:</b> {{object.date|date:'d.m.Y'}}</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Stergere eveniment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="include-content">
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- If object_list is empty  -->
+{% empty %}
+<tr>Nu exista evenimente inca.</tr>
+{% endfor %}
+    
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'main/base.html'%}
+
+{% block title %}Cursuri{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/list-courses.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/snackbar.css' %}"/>
+<script src="{% static 'main/js/snackbar.js' %}"></script>
+<script src="{% static 'main/js/datatable.js' %}"></script>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <div {% if message.tags %} class="{{ message.tags }} show"{% endif %} id="snackbar">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+    <div class='card '>
+        <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+            <div class='card_bg rounded pt-4 pb-3 card_container' style="justify-content:space-between">
+                <h4 class='text-capitalize ps-3 text'>Lectii</h4>
+                {% if type == 'professor' %}
+                    <a class="pt-0" href="{% url 'new-course'%}"  style="text-decoration: none; color: white "><span class="material-symbols-outlined" style="font-size: 40px"> add </span></a>
+                {%endif%}
+                {% comment %} <div class="px-3"><button class='btn btn-primary'><a href="{% url 'new-course'%}" class='text_color'>Adauga un curs</a></button></button></div> {% endcomment %}
+            </div>
+        </div>
+        <div class='card-body px-0 pb-2'>
+            <div class='table-responsive p-3'>
+                <table id="list-courses-table" class='table table-hover align-items-center mb-0' >
+                    <thead class='text_header_color'>
+                        <tr>
+                            <th class='text-center'><h4>Nr. Crt.</h4></th>
+                            <th class='text-center'><h4>Tema</h4></th>
+                            <th class='text-center'><h4>Data</h4></th>
+                            <th class='text-center'><h4>Ora de inceput</h4></th>
+                            <th class='text-center'><h4>Durata</h4></th>
+                            <th class='text-center'></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in object_list %}
+                        <tr>
+                            <td class='text-center'>{{ forloop.counter }}</td>
+                            <td class='text-center'>{{ object.topic }}</td>
+                            <td class='text-center'>{{ object.date|date:"d.m.Y" }}</td>
+                            <td class='text-center'> {{object.startTime|date:"H:i"}}</td>
+                            {%if object.duration > 1%}
+                            <td class='text-center'>{{ object.duration }} ore</td>
+                            {%else%}
+                            <td class='text-center'>{{ object.duration }} ora</td>
+                            {%endif%}
+                            <td class='text-center'>
+                                <button class='btn btn-primary'><a href="{% url 'display-course' object.id %}" class='text_color'>Detalii</a></button>
+                            </td>
+                        </tr>
+                        <!-- If object_list is empty  -->
+                        {% empty %}
+                        <tr>Nu exista cursuri inca.</tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

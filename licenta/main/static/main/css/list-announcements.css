@@ -1,0 +1,59 @@
+.list_courses {
+    position: relative;
+    margin-bottom: 5%;
+    width: 90%;
+    left: 15%;
+
+    padding-top: 5%;
+    
+}
+
+.new_course_button {
+    width: fit-content;
+    position: absolute;
+    right: 0;   
+    transform: translateY(-50%);
+}
+
+.card_background {
+    background-color: lightblue;
+}
+
+.pagination {
+    margin: auto;
+    width: auto;
+    margin-top: 2%;
+}
+
+.text_color {
+    color: aliceblue !important;
+    text-decoration: none !important;
+}
+
+.card_container {
+    display: flex;
+}
+
+.new_button {
+    margin-left: 79%;
+}
+
+
+.card_bg {
+    /* background: radial-gradient(circle, rgba(206, 171, 218, 0.8) 0%, rgba(217, 177, 241, 0.8) 100%); */
+    background-color:black;
+    color: white;
+}
+
+.card-width {
+    height: 120px;
+    align-items: center;
+}
+
+.text {
+   top: 50%;
+}
+
+.text_header_color {
+    color: rgb(98, 174, 221);
+}

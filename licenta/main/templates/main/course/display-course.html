@@ -1,0 +1,302 @@
+{% extends 'main/base.html'%}
+
+{% block title %}{{object.topic}} {% endblock %}
+
+{% block content %}
+{% now "d.m.Y" as todays_date %}
+{% load crispy_forms_tags%}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/display-course.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/snackbar.css' %}"/>
+<script src="{% static 'main/js/snackbar.js' %}"></script>
+<script src="{% static 'main/js/delete_object.js' %}"></script>
+<script src="{% static 'main/js/show_modal.js' %}"></script>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <div {% if message.tags %} class="{{ message.tags }} show"{% endif %} id="snackbar">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Descriere lectie</button>
+        </li>
+        <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Resurse</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Review-uri</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class='course_container'>
+                <div class='card'>
+                    <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+                        <div class='card_bg rounded pt-4 pb-3 card_container align-middle' style="justify-content:space-between">
+                            <h4 class='text-capitalize ps-3 text'>{{object.topic}}</h4>
+                            {%if user.id == professor.id or user.is_superuser%}
+                            <div class="d-flex">
+                                <a class="px-1" href="{% url 'update-course' object.id %}"  style="text-decoration: none; color:white"><span class="material-symbols-outlined">edit </span></a>
+                                <a id = "delete_course" class="px-1" href="#" onClick=includeContent("{% url 'delete-course' object.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:red"><span class="material-symbols-outlined">delete </span></a>
+                            </div>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+    
+                    <div class='card-body px-0 pb-2'>
+                        <div class="container w-75 p-3 bg-light border-white">
+
+                            <div class="row">
+                                <div class="col-md">
+                                   <b>Tematica lectiei</b>
+                                </div>
+                                <div class="col-md">
+                                    {{object.topic}}
+                                </div>
+                            </div>
+                            {% if object.description%}
+                                <div class="row">
+                                    <div class="col-md">
+                                    <b>Descrierea lectiei:</b>
+                                    </div>
+                                    <div class="col-md">
+                                        {{object.description}}
+                                    </div>
+                                </div>
+                            {% endif %}
+    
+                            <div class="row">
+                                <div class="col-md">
+                                   <b>Profesor:</b>
+                                </div>
+                                <div class="col-md">
+                                    {{professor.last_name}} {{professor.first_name}}
+                                </div>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-md">
+                                   <b>Data:</b>
+                                </div>
+                                <div class="col-md">
+                                    {{object.date|date:"d.m.Y"}}
+                                </div>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-md">
+                                   <b>Ora de inceput:</b>
+                                </div>
+                                <div class="col-md">
+                                    {{object.startTime|date:"H:i"}}
+                                </div>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-md">
+                                   <b>Sala:</b>
+                                </div>
+                                <div class="col-md">
+                                    Amfiteatrul {{lectureHall.name}}, etaj {{lectureHall.floor}}
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% comment %} RESURSE {% endcomment %}
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class='course_container'>
+                <div class='card'>
+                    <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+                        <div class='card_bg rounded pt-4 pb-3 card_container' style="justify-content:space-between">
+                            <h4 class=' ps-3 text'>Link-uri utile</h4>
+                            {%if user.id == professor.id or user.is_superuser%}
+                                <a class="pt-0" href="#" onClick=includeReviewForm("{% url 'new_link_resource' object.id%}")  style="text-decoration: none; color: white"data-bs-toggle="modal" data-bs-target="#newReviewModal"><span class="material-symbols-outlined" style="font-size: 40px">  add </span></a>
+                            {%endif%}
+                        </div>
+                    </div>
+                    {%for lr in linkResources%}
+                    <div class='card-body px-0 pb-2 d-flex' style='justify-content:space-between'>  
+                        <div class="container w-75 p-3 bg-light border-white"> 
+                            <div class="row">
+                                <div class="col-md">
+                                    <a href = {{lr.link_resource}}> {{lr.link_resource}}</a>
+                                </div>
+                            </div>
+                        
+                        </div>
+                        {% if user.id == professor.id or user.is_superuser%}
+                        <div class="d-flex flex-row align-items-center justify-content-center">
+                            {% comment %} <a class="pt-2" href="#" onClick=includeContent("{% url 'update-review' review.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:black"><span class="material-symbols-outlined">edit </span></a> {% endcomment %}
+                            <a id = "delete_link_resource" class="pt-2" href="#" onClick=includeContent("{% url 'delete-link-resource' lr.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:red"><span class="material-symbols-outlined">delete </span></a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <!-- If object_list is empty  -->
+                    {% empty %}
+                    <div class='card-body px-0 pb-2 d-flex' style='justify-content:space-between'>  
+                        <div class="container w-75 p-3 bg-light border-white"> 
+                            <div class="row">
+                                <div class="col-md">
+                                    {%if user.id == professor.id %}
+                                        <tr>Nu ati adaugat inca link-uri utile pentru aceasta lectie</tr>
+                                    {% else %}
+                                        <tr>Nu exista inca link-uri utile pentru aceasta lectie</tr>
+                                    {% endif %}
+                                </div>
+                            </div>
+                           
+                        </div>    
+                    </div>                
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class='course_container'>
+                <div class='card'>
+                    <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+                        <div class='card_bg rounded pt-4 pb-3 card_container' style="justify-content:space-between">
+                            <h4 class=' ps-3 text'>Fisiere</h4>
+                            {%if user.id == professor.id or user.is_superuser%}
+                                <a class="pt-0" href="#" onClick=includeReviewForm("{% url 'new_file_resource' object.id%}")  style="text-decoration: none; color: white"data-bs-toggle="modal" data-bs-target="#newReviewModal"><span class="material-symbols-outlined" style="font-size: 40px">  add </span></a>
+                            {%endif%}
+                        </div>
+                    </div>
+                    {%for fr in fileResources%}
+                    <div class='card-body px-0 pb-2 d-flex' style='justify-content:space-between'>  
+                    <div class="container w-75 p-3 bg-light border-white"> 
+                        <div class="row">
+                            <div class="col-md">
+                                {% if '.pdf' in fr.file_resource.name%}
+                                    <a href="{% url 'display_resource' fr.id %}" class="file_link"> 
+                                        <div class="icon"><span class="material-symbols-outlined"> picture_as_pdf</span></div>
+                                        &nbsp;
+                                        <div class="title">{{fr.file_name}}</div>
+                                    </a>
+                                {% else %}
+                                    <a href="{{fr.file_resource.url}}" class="file_link"> 
+                                        <div class="icon"><span class="material-symbols-outlined"> picture_as_pdf</span></div>
+                                        &nbsp;
+                                        <div class="title">{{fr.file_name}}</div>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                       
+                    </div>
+                    {% if user.id == professor.id or user.is_superuser%}
+                    <div class="d-flex flex-row align-items-center justify-content-center">
+                        {% comment %} <a class="pt-2" href="#" onClick=includeContent("{% url 'update-review' review.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:black"><span class="material-symbols-outlined">edit </span></a> {% endcomment %}
+                        <a id = "delete_file_resource" class="pt-2" href="#" onClick=includeContent("{% url 'delete-file-resource' fr.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:red"><span class="material-symbols-outlined">delete </span></a>
+                    </div>
+                    {% endif %}
+                </div>
+                 <!-- If object_list is empty  -->
+                    {% empty %}
+                    <div class='card-body px-0 pb-2 d-flex' style='justify-content:space-between'>  
+                        <div class="container w-75 p-3 bg-light border-white"> 
+                            <div class="row">
+                                <div class="col-md">
+                                    <tr>Nu exista inca fisiere pentru aceasta lectie</tr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% comment %} REVIEWS {% endcomment %}
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            
+            <div class='course_container'>
+            <div class='card'>
+                <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+                    <div class='card_bg rounded pt-4 pb-3 card_container' style="justify-content:space-between">
+                        <h4 class='ps-3 text'>Review-uri</h4>
+                        {% if todays_date >= object.date|date:"d.m.Y"%}
+                            {%if user.id != professor.id%} 
+                                <a class="pt-0" href="#" onClick=includeReviewForm("{% url 'new_review' object.id%}")  style="text-decoration: none; color: white"data-bs-toggle="modal" data-bs-target="#newReviewModal"><span class="material-symbols-outlined" style="font-size: 40px">  add </span></a>
+                            {%endif%}
+                        {%endif%}
+                        
+                    </div>
+                </div>
+                {%for review in reviews%}
+                <div class='card-body px-0 pb-2 d-flex' style='justify-content:space-between'>  
+                    <div class="container w-75 p-3 bg-light border-white"> 
+                        <div class="row">
+                            <p class="text-start">  > {{review.content}}</p>
+                            <p class="text-muted text-end"><b>Adaugat la data de:</b> {{review.date|date:'d.m.Y'}}</p>
+                        </div>
+                    </div>
+                    {% if review.user == user%}
+                    <div class="d-flex flex-row align-items-center justify-content-center">
+                        {% comment %} <a class="pt-2" href="#" onClick=includeContent("{% url 'update-review' review.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:black"><span class="material-symbols-outlined">edit </span></a> {% endcomment %}
+                        <a id = "delete_review" class="pt-2" href="#" onClick=includeContent("{% url 'delete-review' review.id %}") data-bs-toggle="modal" data-bs-target="#exampleModal" style="text-decoration: none; color:red"><span class="material-symbols-outlined">delete </span></a>
+                    </div>
+                    {% endif %}
+                </div>
+                    <!-- If object_list is empty  -->
+                    {% empty %}
+                    <div class='card-body px-0 pb-2 d-flex' style='justify-content:space-between'>  
+                        <div class="container w-75 p-3 bg-light border-white"> 
+                            <div class="row">
+                                {%if user.id == professor.id%}
+                                <tr class="px-3"> Nu a fost adaugat niciun review pentru aceasta lectie</tr>
+                                {% else %}
+                                <tr class="px-3">Nu ai adaugat inca review-uri pentru aceasta lectie</tr>
+                                {%endif%}
+                            </div>
+                           
+                        </div>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+
+        
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sterge</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="include-content">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="newReviewModal" tabindex="-1" aria-labelledby="newReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newReviewModalLabel">Adauga</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="include-review-form">
+        
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,67 @@
+.calendar {
+    width: 100%;
+    margin: auto;
+    font-size: 13px;
+   
+    
+  }
+  
+  .calendar tr, .calendar td {
+    border: 1px solid black;
+      
+  }
+  
+  .calendar th {
+    padding: 1%;
+    text-align: center;
+    font-size: 18px;
+    /* background-color: rgba(164, 211, 243, 0.8); */
+    background-color: black;
+    color: white;
+    
+  }
+  
+  .calendar td {
+    width: 14%;
+    height: 30%;
+    padding: 20px 0px 0px 5px;
+  }
+  
+  .month {
+    font-size: 25px;
+    /* background: radial-gradient(circle, rgba(255, 173, 105, 0.8) 0%, rgba(241, 203, 177, 0.8) 100%); */
+    background-color: rgba(163, 188, 219, 0.8);
+  }
+  
+  .date {
+    font-size: 16px;
+  }
+  
+  ul {
+    height: 100%;
+    padding: 0px 5px 0px 20px;
+  }
+  
+  .left {
+    float: left;
+  }
+  
+  .right {
+    float: right;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  
+  /* .btn {
+    outline: none;
+    color: black;
+    background-color: transparent;
+    box-shadow: 0 0 0 0;
+  } */
+  
+  .clearfix {
+    margin: 15px;
+  }

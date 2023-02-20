@@ -1,0 +1,25 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/list-events.css' %}"/>
+
+
+<div class='course_container pt-3'>
+    <div class='card'>
+        <div class='card-header p-0 position-relative mt-n4 mx-3 z-index-2 '>
+            <div class='card_bg rounded pt-4 pb-3 card_container'> 
+                <div class="container" style="display: flex; justify-content:space-between">
+                    <div  class="container d-flex align-items-center">
+                        <h5 class=' ps-3 text'>{{object.title}}</h5>
+                    </div>               
+                </div>      
+            </div>
+        </div>
+        <div class='card-body p-1 pb-2'>
+            <div class="container w-75 p-1 pb-2 bg-light border-white" >
+                <p class="text-start">{{object.content}}</p>
+                <p class="text-start">Are loc la data de: <b>{{object.date|date:'d.m.Y'}} </b></p>
+                <p class="text-muted text-end"><b>Creat la data de:</b> {{object.date|date:'d.m.Y'}}</p>
+            </div>
+
+        </div>
+    </div>
+</div>
